@@ -17,13 +17,13 @@ public class HomeController {
     private void initialize() {
         Usuario usuario = SesionUsuario.getUsuarioActual();
         if (usuario != null) {
-            lblBienvenida.setText("Bienvenido, " + usuario.getNombre() + " " + usuario.getApellido());
+            lblBienvenida.setText("Bienvenido, " + usuario.getCorreo());
         }
     }
 
     @FXML
     private void cerrarSesion() throws IOException {
         SesionUsuario.cerrar();    
-        App.setRoot("login");       
+        App.setRoot("login");        
     }
 }

@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stanly.loguin.javafx.HomeController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="stanly.miaula_ufg.HomeController">
    <children>
       <Label fx:id="lblBienvenida" text="Bienvenido" style="-fx-font-size: 20px;" />
       <Hyperlink onAction="#cerrarSesion" text="Cerrar sesión" />
