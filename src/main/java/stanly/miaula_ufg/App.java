@@ -17,7 +17,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(cargar("login"), 400, 350);
+        //scene = new Scene(cargar("login"), 400, 350);
+        scene = new Scene(cargar("home"), 400, 350);
         stage.setTitle("Login JavaFX + Hibernate");
         stage.setScene(scene);
         stage.show();
