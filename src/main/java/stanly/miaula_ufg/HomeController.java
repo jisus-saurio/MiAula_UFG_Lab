@@ -20,6 +20,9 @@ public class HomeController {
     @FXML private Label lblBienvenida;
     @FXML private Label lblMensaje;
     
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtEdificio;
+    @FXML private ComboBox<Integer> cmbPlanta;
     @FXML private TextField txtCapacidad;
     @FXML private ComboBox<String> cmbTipoAula;
     @FXML private TextField txtResponsable;
@@ -33,6 +36,9 @@ public class HomeController {
         if (usuario != null) {
             lblBienvenida.setText("Bienvenido, " + usuario.getCorreo());
         }
+        for (int i = 1; i <= 10; i++) {
+        cmbPlanta.getItems().add(i);
+}
         cmbTipoAula.setItems(FXCollections.observableArrayList(
                 "Normal", "Centro de cómputo", "Laboratorio", "Especial"));
         cmbEstado.setItems(FXCollections.observableArrayList(
@@ -41,12 +47,24 @@ public class HomeController {
     
     @FXML
     private void guardar() {
+        String nombre = txtNombre.getText().trim();
+        String edificio = txtEdificio.getText().trim();
+        Integer planta = cmbPlanta.getValue();
         String capacidadTexto = txtCapacidad.getText().trim();
         String tipoAula = cmbTipoAula.getValue();
         String responsable = txtResponsable.getText().trim();
         String estado = cmbEstado.getValue();
 
+        if (nombre.isEmpty() || edificio.isEmpty() || planta == null) {
+             mostrarError("Ningún campo puede estar vacío.");
+            return;
+        }
         
+        if (nombre.length() > 50 || edificio.length() > 50) {
+            mostrarError("El nombre y el edificio no pueden superar los 50 caracteres.");
+            return;
+        }
+
         if (capacidadTexto.isEmpty() || responsable.isEmpty() || tipoAula == null || estado == null) {
             mostrarError("Ningún campo puede estar vacío.");
             return;
@@ -74,6 +92,9 @@ public class HomeController {
         aula.setTipoAula(tipoAula);
         aula.setResponsable(responsable);
         aula.setEstado(estado);
+        aula.setNombre(nombre);
+        aula.setEdificio(edificio);
+        aula.setPlanta(planta);
      
 
         try {
@@ -98,7 +119,10 @@ public class HomeController {
         txtResponsable.clear();
         cmbEstado.getSelectionModel().clearSelection();
         cmbEstado.setValue(null);
-        // TODO (compañera): limpiar también txtNombre, txtEdificio y cmbPlanta
+        txtNombre.clear();
+        txtEdificio.clear();
+        cmbPlanta.getSelectionModel().clearSelection();
+        cmbPlanta.setValue(null);
         lblMensaje.setText("");
     }
     
