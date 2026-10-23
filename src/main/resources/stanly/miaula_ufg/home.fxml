@@ -25,10 +25,16 @@
             <ColumnConstraints hgrow="ALWAYS" minWidth="220.0" />
          </columnConstraints>
          <children>
-            <!-- TODO (compañera): filas 0, 1 y 2 reservadas para Nombre, Edificio y Planta.
-                 Agregar Label + TextField (nombre, edificio) y Label + ComboBox (planta)
-                 con GridPane.rowIndex="0", "1" y "2". -->
+            <!-- Campos de filas 0 a 2 -->
+            <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="txtNombre" promptText="Ej. B-204" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
+            <Label text="Edificio:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="txtEdificio" promptText="Edificio del aula" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="Planta:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <ComboBox fx:id="cmbPlanta" promptText="Seleccione" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            
             <!-- Campos de esta parte (filas 3 a 6) -->
             <Label text="Capacidad:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <TextField fx:id="txtCapacidad" promptText="Personas que caben" GridPane.columnIndex="1" GridPane.rowIndex="3" />
