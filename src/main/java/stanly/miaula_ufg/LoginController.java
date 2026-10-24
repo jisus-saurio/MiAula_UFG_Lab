@@ -33,7 +33,7 @@ public class LoginController {
             Usuario usuario = usuarioDAO.autenticar(correo, clave);
 
             if (usuario == null) {
-                lblMensaje.setText("Credenciales incorrectas o usuario inactivo.");
+                lblMensaje.setText("Credenciales incorrectas.");
                 txtClave.clear();
                 return;
             }
