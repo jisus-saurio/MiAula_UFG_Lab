@@ -5,6 +5,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import stanly.miaula_ufg.entidades.Usuario;
 import stanly.miaula_ufg.util.SesionUsuario;
+import javafx.collections.FXCollections;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import org.hibernate.exception.ConstraintViolationException;
+import stanly.miaula_ufg.dao.AulaDAO;
+import stanly.miaula_ufg.entidades.Aula;
 
 /**
  * @author stanl
@@ -12,6 +18,17 @@ import stanly.miaula_ufg.util.SesionUsuario;
 public class HomeController {
 
     @FXML private Label lblBienvenida;
+    @FXML private Label lblMensaje;
+    
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtEdificio;
+    @FXML private ComboBox<Integer> cmbPlanta;
+    @FXML private TextField txtCapacidad;
+    @FXML private ComboBox<String> cmbTipoAula;
+    @FXML private TextField txtResponsable;
+    @FXML private ComboBox<String> cmbEstado;
+    
+    private final AulaDAO aulaDAO = new AulaDAO();
 
     @FXML
     private void initialize() {
@@ -19,11 +36,120 @@ public class HomeController {
         if (usuario != null) {
             lblBienvenida.setText("Bienvenido, " + usuario.getCorreo());
         }
+        for (int i = 1; i <= 10; i++) {
+        cmbPlanta.getItems().add(i);
+}
+        cmbTipoAula.setItems(FXCollections.observableArrayList(
+                "Normal", "Centro de cómputo", "Laboratorio", "Especial"));
+        cmbEstado.setItems(FXCollections.observableArrayList(
+                "Asignada", "Asignada temporalmente", "En mantenimiento", "Disponible"));
     }
+    
+    @FXML
+    private void guardar() {
+        String nombre = txtNombre.getText().trim();
+        String edificio = txtEdificio.getText().trim();
+        Integer planta = cmbPlanta.getValue();
+        String capacidadTexto = txtCapacidad.getText().trim();
+        String tipoAula = cmbTipoAula.getValue();
+        String responsable = txtResponsable.getText().trim();
+        String estado = cmbEstado.getValue();
+
+        if (nombre.isEmpty() || edificio.isEmpty() || planta == null) {
+             mostrarError("Ningún campo puede estar vacío.");
+            return;
+        }
+        
+        if (nombre.length() > 50 || edificio.length() > 50) {
+            mostrarError("El nombre y el edificio no pueden superar los 50 caracteres.");
+            return;
+        }
+
+        if (capacidadTexto.isEmpty() || responsable.isEmpty() || tipoAula == null || estado == null) {
+            mostrarError("Ningún campo puede estar vacío.");
+            return;
+        }
+
+        int capacidad;
+        try {
+            capacidad = Integer.parseInt(capacidadTexto);
+        } catch (NumberFormatException e) {
+            mostrarError("La capacidad debe ser un número entero.");
+            return;
+        }
+        if (capacidad <= 0) {
+            mostrarError("La capacidad debe ser mayor que 0.");
+            return;
+        }
+        if (responsable.length() > 100) {
+            mostrarError("El responsable no puede superar los 100 caracteres.");
+            return;
+        }
+        
+
+        Aula aula = new Aula();
+        aula.setCapacidad(capacidad);
+        aula.setTipoAula(tipoAula);
+        aula.setResponsable(responsable);
+        aula.setEstado(estado);
+        aula.setNombre(nombre);
+        aula.setEdificio(edificio);
+        aula.setPlanta(planta);
+     
+
+        try {
+            aulaDAO.guardar(aula);
+            limpiar();
+            mostrarExito("Aula guardada correctamente.");
+        } catch (Exception e) {
+            if (esAulaDuplicada(e)) {
+                mostrarError("Ya existe un aula con ese nombre en ese edificio.");
+            } else {
+                mostrarError("No se pudo guardar el aula en la base de datos.");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void limpiar() {
+        txtCapacidad.clear();
+        cmbTipoAula.getSelectionModel().clearSelection();
+        cmbTipoAula.setValue(null);
+        txtResponsable.clear();
+        cmbEstado.getSelectionModel().clearSelection();
+        cmbEstado.setValue(null);
+        txtNombre.clear();
+        txtEdificio.clear();
+        cmbPlanta.getSelectionModel().clearSelection();
+        cmbPlanta.setValue(null);
+        lblMensaje.setText("");
+    }
+    
 
     @FXML
     private void cerrarSesion() throws IOException {
         SesionUsuario.cerrar();    
         App.setRoot("login");        
+    }
+
+    private boolean esAulaDuplicada(Throwable error) {
+        while (error != null) {
+            if (error instanceof ConstraintViolationException) {
+                return true;
+            }
+            error = error.getCause();
+        }
+        return false;
+    }
+
+    private void mostrarError(String mensaje) {
+        lblMensaje.setStyle("-fx-text-fill: red;");
+        lblMensaje.setText(mensaje);
+    }
+
+    private void mostrarExito(String mensaje) {
+        lblMensaje.setStyle("-fx-text-fill: green;");
+        lblMensaje.setText(mensaje);
     }
 }

@@ -18,17 +18,47 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(cargar("login"), 400, 350);
+
         stage.setTitle("Login JavaFX + Hibernate");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(cargar(fxml));
+        ajustarVentana(fxml);
+    }
+
+    private static void ajustarVentana(String fxml) {
+        Stage stage = (Stage) scene.getWindow();
+
+        if (stage == null) {
+            return;
+        }
+
+        switch (fxml) {
+            case "login":
+                stage.setWidth(400);
+                stage.setHeight(350);
+                break;
+
+            case "home":
+                stage.setWidth(800);
+                stage.setHeight(600);
+                break;
+
+            default:
+                break;
+        }
+
+        stage.centerOnScreen();
     }
 
     private static Parent cargar(String fxml) throws IOException {
-        return new FXMLLoader(App.class.getResource(fxml + ".fxml")).load();
+        return new FXMLLoader(
+                App.class.getResource(fxml + ".fxml")
+        ).load();
     }
 
     @Override
@@ -37,6 +67,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }
