@@ -2,18 +2,30 @@
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "https://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!-- Configuración de Hibernate: cómo conectarse a la base de datos -->
 <hibernate-configuration>
     <session-factory>
+
+        <!-- Conexión a MySQL -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <!-- Dirección de la base de datos: servidor, puerto y nombre -->
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ufg_gestion_aulas?useSSL=false&amp;serverTimezone=America/El_Salvador</property>
+        <!-- Usuario de MySQL -->
         <property name="hibernate.connection.username">root</property>
+        <!-- Clave de MySQL (vacía) -->
         <property name="hibernate.connection.password"></property>
 
+        <!-- Muestra en la consola las consultas que se ejecutan -->
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
+        <!-- Crea las tablas que falten sin borrar datos -->
         <property name="hibernate.hbm2ddl.auto">update</property>
 
+        <!-- Clases que son tablas -->
         <mapping class="stanly.miaula_ufg.entidades.Usuario"/>
+        <mapping class="stanly.miaula_ufg.entidades.Planta"/>
+        <mapping class="stanly.miaula_ufg.entidades.TipoAula"/>
+        <mapping class="stanly.miaula_ufg.entidades.EstadoAula"/>
         <mapping class="stanly.miaula_ufg.entidades.Aula"/>
     </session-factory>
 </hibernate-configuration>
